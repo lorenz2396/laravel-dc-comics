@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 // Models
-
 use App\Models\Comic;
 
 class ComicController extends Controller
@@ -24,7 +24,7 @@ class ComicController extends Controller
     { 
         $comics=Comic::all();
 
-        return view('index',compact('comics'));
+        return view('comics.index',compact('comics'));
     }
 
     /**
@@ -32,7 +32,7 @@ class ComicController extends Controller
      */
     public function create()
     {
-        return view('create');
+        return view('comics.create');
     }
 
     /**
@@ -42,6 +42,18 @@ class ComicController extends Controller
     public function store(Request $request)
     {
         $formData = $request->all();
+
+        $request -> validate ([
+            'title' => 'required|max:70',
+            'description' => 'required',
+            'thumb' => 'nullable|max:2048',
+            'price' => 'required|max:70',
+            'series' => 'nullabale|max:64',
+            'sale_date' => 'nullabale|date',
+        ],[
+            'title.required' => 'Il titolo è obbligatorio',
+            'title.max' => 'Il titolo non può essere più lungo di 70 caratteri'
+        ]);
 
         $comic = new Comic();
         $comic->title = $formData['title'];
@@ -54,6 +66,7 @@ class ComicController extends Controller
         $comic->artists = json_encode(explode(',', $formData['artists']));
         $comic->writers = json_encode(explode(',', $formData['writers']));
         $comic->save();
+
         return redirect()->route('home.index');
         
     }
@@ -63,9 +76,9 @@ class ComicController extends Controller
      */
     public function show(string $id)
     {
-        $comic=Comic::find($id);
+        $comic = Comic::find($id);
 
-        return view('show',compact('comic'));
+        return view('comics.show',compact('comic'));
     }
 
     /**
@@ -73,9 +86,9 @@ class ComicController extends Controller
      */
     public function edit(string $id)
     {
-        $comic=Comic::find($id);
+        $comic = Comic::find($id);
 
-        return view('edit',compact('comic'));
+        return view('comics.edit',compact('comic'));
     }
 
     /**
@@ -83,6 +96,19 @@ class ComicController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request -> validate ([
+            'title' => 'required|max:70',
+            'description' => 'required',
+            'thumb' => 'nullable|max:2048',
+            'price' => 'required|max:70',
+            'series' => 'nullabale|max:64',
+            'sale_date' => 'nullabale|date',
+        ],[
+            'title.required' => 'Il titolo è obbligatorio',
+            'title.max' => 'Il titolo non può essere più lungo di 70 caratteri'
+        ]);
+
+
         $comic = Comic::find($id);
         $formData = $request->all();
 
@@ -96,7 +122,8 @@ class ComicController extends Controller
         $comic->artists = json_encode(explode(',', $formData['artists']));
         $comic->writers = json_encode(explode(',', $formData['writers']));
         $comic->save();
-        return redirect()->route('home.index');
+        
+        return redirect()->route('comics.index');
     }
 
     /**
@@ -108,6 +135,6 @@ class ComicController extends Controller
         
         $comic->delete();
 
-        return redirect()->route('home.index');
+        return redirect()->route('comics.index');
     }
 }
