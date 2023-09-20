@@ -16,6 +16,7 @@
                     <th scope="col">Id</th>
                     <th scope="col">Titolo</th>
                     <th scope="col">Serie</th>
+                    <th scope="col">Price</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,12 +25,13 @@
                         <th scope="row">{{ $comic->id }}</th>
                         <td>{{ $comic->title }}</td>
                         <td>{{ $comic->series }}</td>
+                        <td>{{ $comic->price }}</td>
                         <td>
-                            <a class="btn btn-info" href="{{ route('home.show', $comic->id) }}">
+                            <a class="btn btn-info" href="{{ route('home.show', ['home'=> $comic->id]) }}">
                                 Info
                             </a>
-                            <a class="btn btn-warning" href="{{ route('home.edit', $comic->id) }}">Modifica</a>
-                            <form class="d-inline-block" action="{{ route('home.destroy', $comic->id) }}" method="POST">
+                            <a class="btn btn-warning" href="{{ route('home.edit', ['home'=> $comic->id]) }}">Modifica</a>
+                            <form class="d-inline-block" action="{{ route('home.destroy', ['home'=> $comic->id]) }}" method="POST">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-danger">

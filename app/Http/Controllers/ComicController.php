@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+//REquest
+use App\Http\Requests\Comic\StoreComicRequest;
+use App\Http\Requests\Comic\UpdateComicRequest;
+
 // Models
 use App\Models\Comic;
 
@@ -39,21 +43,21 @@ class ComicController extends Controller
      * Store a newly created resource in storage.
      */
 
-    public function store(Request $request)
+    public function store(StoreComicRequest $request)
     {
         $formData = $request->all();
 
-        $request -> validate ([
-            'title' => 'required|max:70',
-            'description' => 'required',
-            'thumb' => 'nullable|max:2048',
-            'price' => 'required|max:70',
-            'series' => 'nullabale|max:64',
-            'sale_date' => 'nullabale|date',
-        ],[
-            'title.required' => 'Il titolo è obbligatorio',
-            'title.max' => 'Il titolo non può essere più lungo di 70 caratteri'
-        ]);
+        // $request -> validate ([
+        //     'title' => 'required|max:70',
+        //     'description' => 'required',
+        //     'thumb' => 'nullable|max:2048',
+        //     'price' => 'required|max:70',
+        //     'series' => 'nullabale|max:64',
+        //     'sale_date' => 'nullabale|date',
+        // ],[
+        //     'title.required' => 'Il titolo è obbligatorio',
+        //     'title.max' => 'Il titolo non può essere più lungo di 70 caratteri'
+        // ]);
 
         $comic = new Comic();
         $comic->title = $formData['title'];
@@ -96,17 +100,17 @@ class ComicController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request -> validate ([
-            'title' => 'required|max:70',
-            'description' => 'required',
-            'thumb' => 'nullable|max:2048',
-            'price' => 'required|max:70',
-            'series' => 'nullabale|max:64',
-            'sale_date' => 'nullabale|date',
-        ],[
-            'title.required' => 'Il titolo è obbligatorio',
-            'title.max' => 'Il titolo non può essere più lungo di 70 caratteri'
-        ]);
+        // $request -> validate ([
+        //     'title' => 'required|max:70',
+        //     'description' => 'required',
+        //     'thumb' => 'nullable|max:2048',
+        //     'price' => 'required|max:70',
+        //     'series' => 'nullabale|max:64',
+        //     'sale_date' => 'nullabale|date',
+        // ],[
+        //     'title.required' => 'Il titolo è obbligatorio',
+        //     'title.max' => 'Il titolo non può essere più lungo di 70 caratteri'
+        // ]);
 
 
         $comic = Comic::find($id);
@@ -122,7 +126,7 @@ class ComicController extends Controller
         $comic->artists = json_encode(explode(',', $formData['artists']));
         $comic->writers = json_encode(explode(',', $formData['writers']));
         $comic->save();
-        
+
         return redirect()->route('comics.index');
     }
 
